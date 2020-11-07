@@ -32,16 +32,4 @@ describe("TeamsPage", () => {
     const teams = container.querySelectorAll(".team");
     expect(teams).toHaveLength(2);
   });
-
-  it("should render null if isLoading is true", () => {
-    const { container } = render(<TeamsPage />, {
-      reduxState: {
-        teams: {
-          isLoading: true,
-          teams: [],
-        },
-      },
-    });
-    expect(container.querySelector("#teams")).toBeFalsy();
-  });
 });
