@@ -1,9 +1,9 @@
 import React from "react";
-import App from "./App";
-import { render } from "./test-utils";
+import { render } from "../../test-utils";
+import NavBar from "./NavBar";
 
 test("renders learn react link", () => {
-  const { getByText } = render(<App />);
+  const { getByText } = render(<NavBar />);
   const linkElement = getByText(/Teams/i);
   expect(linkElement).toBeInTheDocument();
 });
