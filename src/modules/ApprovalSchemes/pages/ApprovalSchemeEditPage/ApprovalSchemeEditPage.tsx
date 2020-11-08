@@ -1,6 +1,12 @@
 import React, { ReactElement, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { Button, Card, Container } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Container,
+  Dropdown,
+  DropdownButton,
+} from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import { ApprovalSchemeStep } from "../../../../redux/modules/approval-schemes/approval-schemes.types";
@@ -57,6 +63,14 @@ function ApprovalSchemeEditPage(): ReactElement {
     });
   };
 
+  const deleteThreshold = (indexStep: number): void => {
+    const copyApprovalSchemesSteps = [...formik.values.approvalSchemesSteps];
+    copyApprovalSchemesSteps.splice(indexStep, 1);
+    formik.setValues({
+      approvalSchemesSteps: [...copyApprovalSchemesSteps],
+    });
+  };
+
   const updateStepApprover = (
     event: React.ChangeEvent<HTMLSelectElement>,
     indexStep: number
@@ -107,10 +121,23 @@ function ApprovalSchemeEditPage(): ReactElement {
                   <Card.Header>
                     <div className="row">
                       <div className="col-10">
-                        <span>
+                        <h3>
                           From {approvalSchemesStep.from}€ to{" "}
                           {approvalSchemesStep.to}€
-                        </span>
+                        </h3>
+                      </div>
+                      <div className="col-2 d-flex justify-content-end">
+                        <DropdownButton
+                          id="dropdown-basic-button"
+                          title="Actions"
+                          menuAlign="right"
+                        >
+                          <Dropdown.Item
+                            onClick={() => deleteThreshold(indexStep)}
+                          >
+                            Delete
+                          </Dropdown.Item>
+                        </DropdownButton>
                       </div>
                     </div>
                   </Card.Header>
