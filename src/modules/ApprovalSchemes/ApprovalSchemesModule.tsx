@@ -1,13 +1,13 @@
 import React, { ReactElement } from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
-import ApprovalSchemeEdit from "./pages/ApprovalSchemeEdit";
+import ApprovalSchemeEditPage from "./pages/ApprovalSchemeEditPage";
 
 function ApprovalSchemesModule(): ReactElement {
   const { path } = useRouteMatch();
   return (
     <Switch>
-      <Route path={`${path}/:teamId`}>
-        <ApprovalSchemeEdit />
+      <Route exact path={`${path}/:teamId`}>
+        <ApprovalSchemeEditPage />
       </Route>
     </Switch>
   );

@@ -18,12 +18,13 @@ export interface RenderWithProvidersOptionType {
   route?: string;
 }
 
+const history = createMemoryHistory();
+
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function renderWithProviders(
   ui: ReactElement,
   option?: RenderWithProvidersOptionType
 ) {
-  const history = createMemoryHistory();
   history.push(option?.route ?? "/");
   const store = createStore(rootReducers, option?.reduxState ?? initialState);
   return render(

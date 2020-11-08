@@ -7,6 +7,6 @@ describe("ApprovalSchemesModule", () => {
     const { getByText } = render(<ApprovalSchemesModule />, {
       route: "//TEAM1",
     });
-    expect(getByText(/Edition approval scheme/i)).toBeTruthy();
+    expect(getByText(/Set up approvers/i)).toBeTruthy();
   });
 });
