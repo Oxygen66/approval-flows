@@ -147,6 +147,48 @@ describe("ApprovalSchemeEditPage", () => {
     expect(submitButton.disabled).toBeFalsy();
   });
 
+  it("should be disabled if from is below 0", async () => {
+    const { getByText, container } = render(<ApprovalSchemeEditPage />, {
+      reduxState: {
+        users: {
+          isLoading: false,
+          users: [...mockUsers],
+        },
+      },
+    });
+    fireEvent.click(getByText(/Add a threshold/i));
+    const fromInput = container.querySelector(
+      "input[name='approvalSchemesSteps.0.from']"
+    ) as HTMLInputElement;
+    await waitFor(() => fireEvent.change(fromInput, { target: { value: -5 } }));
+    const submitButton = getByText(/submit/i) as HTMLButtonElement;
+    expect(submitButton.disabled).toBeTruthy();
+  });
+
+  it("should be disabled if from is above to", async () => {
+    const { getByText, container } = render(<ApprovalSchemeEditPage />, {
+      reduxState: {
+        users: {
+          isLoading: false,
+          users: [...mockUsers],
+        },
+      },
+    });
+    fireEvent.click(getByText(/Add a threshold/i));
+    const fromInput = container.querySelector(
+      "input[name='approvalSchemesSteps.0.from']"
+    ) as HTMLInputElement;
+    await waitFor(() =>
+      fireEvent.change(fromInput, { target: { value: 500 } })
+    );
+    const toInput = container.querySelector(
+      "input[name='approvalSchemesSteps.0.to']"
+    ) as HTMLInputElement;
+    await waitFor(() => fireEvent.change(toInput, { target: { value: 200 } }));
+    const submitButton = getByText(/submit/i) as HTMLButtonElement;
+    expect(submitButton.disabled).toBeTruthy();
+  });
+
   it("should submit without error", async () => {
     await act(async () => {
       const { getByText } = render(<ApprovalSchemeEditPage />);
