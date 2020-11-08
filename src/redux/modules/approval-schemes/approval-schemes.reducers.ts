@@ -1,5 +1,7 @@
 import { Reducer } from "redux";
 import { put, takeLatest } from "redux-saga/effects";
+import storage from "redux-persist/lib/storage";
+import { persistReducer } from "redux-persist";
 import {
   ADD_APPROVAL_SCHEME_STEP,
   ADD_APPROVAL_SCHEME_STEP_REQUESTED,
@@ -67,6 +69,15 @@ export const approvalSchemesReducer: Reducer<
     }
   }
 };
+
+export const persistApprovalSchemesReducer = persistReducer(
+  {
+    storage,
+    key: "approval-flows_approvalSchemes",
+    whitelist: ["approvalSchemes"],
+  },
+  approvalSchemesReducer
+);
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function* addApprovalSchemeSaga({
