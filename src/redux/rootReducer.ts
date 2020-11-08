@@ -7,7 +7,7 @@ import * as approvalSchemes from "./modules/approval-schemes/approval-schemes.re
 export const rootReducers = combineReducers({
   teams: teams.teamsReducer,
   users: users.usersReducer,
-  approvalSchemes: approvalSchemes.approvalSchemesReducer,
+  approvalSchemes: approvalSchemes.persistApprovalSchemesReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducers>;
