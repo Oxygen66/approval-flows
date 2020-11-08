@@ -36,6 +36,31 @@ function ApprovalSchemeEditPage(): ReactElement {
     initialValues: {
       approvalSchemesSteps: approvalSchemes[teamId] || [],
     },
+    validate: (values) => {
+      const errors: {
+        [key: string]: {
+          [key: number]: string;
+        };
+      } = {};
+
+      const approvalSchemesStepsErrors: {
+        [key: number]: string;
+      } = {};
+      values.approvalSchemesSteps.forEach((approvalSchemesStep, index) => {
+        const indexOfUserId = values.approvalSchemesSteps
+          .map((data) => data.approver.id)
+          .indexOf(approvalSchemesStep.approver.id);
+        if (indexOfUserId !== index) {
+          approvalSchemesStepsErrors[index] = "This user cant be added";
+        }
+      });
+
+      if (Object.keys(approvalSchemesStepsErrors).length > 0) {
+        errors.approvalSchemesSteps = approvalSchemesStepsErrors;
+      }
+
+      return errors;
+    },
     onSubmit(values) {
       dispatch(updateApprovalSchemeStep(teamId, values.approvalSchemesSteps));
     },
@@ -145,7 +170,11 @@ function ApprovalSchemeEditPage(): ReactElement {
                     <div className="row">
                       <div className="col-12">
                         <select
-                          className="form-control"
+                          className={`form-control${
+                            formik.errors.approvalSchemesSteps?.[indexStep]
+                              ? " is-invalid"
+                              : ""
+                          }`}
                           onChange={(event) =>
                             updateStepApprover(event, indexStep)
                           }
@@ -165,7 +194,7 @@ function ApprovalSchemeEditPage(): ReactElement {
             )
           )}
           <div className="col-12">
-            <Button className="mt-3" type="submit">
+            <Button disabled={!formik.isValid} className="mt-3" type="submit">
               Submit
             </Button>
           </div>

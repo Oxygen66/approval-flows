@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, act } from "../../../../test-utils";
+import { act, fireEvent, render, waitFor } from "../../../../test-utils";
 import ApprovalSchemeEditPage from "./ApprovalSchemeEditPage";
 import { User } from "../../../../services/api/users/users.dto";
 
@@ -93,6 +93,58 @@ describe("ApprovalSchemeEditPage", () => {
     fireEvent.click(getByText(/delete/i));
     expect(() => getByText("From 0€ to 500€")).toThrowError();
     expect(getByText("From 500€ to 1500€")).toBeTruthy();
+  });
+
+  it("should be disabled if we have duplicate users", async () => {
+    const { getByText, container } = render(<ApprovalSchemeEditPage />, {
+      reduxState: {
+        users: {
+          isLoading: false,
+          users: [...mockUsers],
+        },
+      },
+    });
+    fireEvent.click(getByText(/Add a threshold/i));
+    fireEvent.click(getByText(/Add a threshold/i));
+    const selectButtons = container.querySelectorAll("select");
+    await waitFor(() => {
+      fireEvent.change(selectButtons.item(0), {
+        target: { value: "u2" },
+      });
+    });
+    await waitFor(() => {
+      fireEvent.change(selectButtons.item(1), {
+        target: { value: "u2" },
+      });
+    });
+    const submitButton = getByText(/submit/i) as HTMLButtonElement;
+    expect(submitButton.disabled).toBeTruthy();
+  });
+
+  it("should be not disabled if we dont have duplicate users", async () => {
+    const { getByText, container } = render(<ApprovalSchemeEditPage />, {
+      reduxState: {
+        users: {
+          isLoading: false,
+          users: [...mockUsers],
+        },
+      },
+    });
+    fireEvent.click(getByText(/Add a threshold/i));
+    fireEvent.click(getByText(/Add a threshold/i));
+    const selectButtons = container.querySelectorAll("select");
+    await waitFor(() => {
+      fireEvent.change(selectButtons.item(0), {
+        target: { value: "u1" },
+      });
+    });
+    await waitFor(() => {
+      fireEvent.change(selectButtons.item(1), {
+        target: { value: "u2" },
+      });
+    });
+    const submitButton = getByText(/submit/i) as HTMLButtonElement;
+    expect(submitButton.disabled).toBeFalsy();
   });
 
   it("should submit without error", async () => {
