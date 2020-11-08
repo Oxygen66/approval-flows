@@ -23,6 +23,20 @@ export interface ApprovalSchemeEditPageRouteParams {
   teamId: string;
 }
 
+export interface ErrorsType {
+  [key: string]: {
+    [key: number]: {
+      [key: string]: string;
+    };
+  };
+}
+
+export interface ApprovalSchemesStepsErrorsType {
+  [key: number]: {
+    [key: string]: string;
+  };
+}
+
 function ApprovalSchemeEditPage(): ReactElement {
   const { teamId } = useParams<ApprovalSchemeEditPageRouteParams>();
   const users = useSelector((state: RootState) => state.users.users);
@@ -37,21 +51,30 @@ function ApprovalSchemeEditPage(): ReactElement {
       approvalSchemesSteps: approvalSchemes[teamId] || [],
     },
     validate: (values) => {
-      const errors: {
-        [key: string]: {
-          [key: number]: string;
-        };
-      } = {};
+      const errors: ErrorsType = {};
 
-      const approvalSchemesStepsErrors: {
-        [key: number]: string;
-      } = {};
+      const approvalSchemesStepsErrors: ApprovalSchemesStepsErrorsType = {};
       values.approvalSchemesSteps.forEach((approvalSchemesStep, index) => {
         const indexOfUserId = values.approvalSchemesSteps
           .map((data) => data.approver.id)
           .indexOf(approvalSchemesStep.approver.id);
+        const stepError: { [key: string]: string } = {};
         if (indexOfUserId !== index) {
-          approvalSchemesStepsErrors[index] = "This user cant be added";
+          stepError.approver = "This user cant be added";
+        }
+
+        if (approvalSchemesStep.from < 0) {
+          stepError.from = 'The value of "from" is below 0 "';
+        } else if (approvalSchemesStep.from >= approvalSchemesStep.to) {
+          stepError.from = 'The value of "from" is above "to"';
+        }
+
+        if (approvalSchemesStep.to <= approvalSchemesStep.from) {
+          stepError.to = "Error";
+        }
+
+        if (Object.keys(stepError).length > 0) {
+          approvalSchemesStepsErrors[index] = stepError;
         }
       });
 
@@ -168,10 +191,63 @@ function ApprovalSchemeEditPage(): ReactElement {
                   </Card.Header>
                   <Card.Body>
                     <div className="row">
+                      <div className="col-3">
+                        <div className="form-group">
+                          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                          <label
+                            htmlFor={`approvalSchemesSteps.${indexStep}.from`}
+                          >
+                            From
+                          </label>
+                          <input
+                            type="number"
+                            className={`form-control${
+                              (formik.errors as ErrorsType)
+                                .approvalSchemesSteps?.[indexStep]?.from
+                                ? " is-invalid"
+                                : ""
+                            }`}
+                            id={`approvalSchemesSteps.${indexStep}.from`}
+                            name={`approvalSchemesSteps.${indexStep}.from`}
+                            onChange={formik.handleChange}
+                            value={
+                              formik.values.approvalSchemesSteps[indexStep].from
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="col-3">
+                        <div className="form-group">
+                          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                          <label
+                            htmlFor={`approvalSchemesSteps.${indexStep}.to`}
+                          >
+                            To
+                          </label>
+                          <input
+                            type="number"
+                            className={`form-control${
+                              (formik.errors as ErrorsType)
+                                .approvalSchemesSteps?.[indexStep]?.to
+                                ? " is-invalid"
+                                : ""
+                            }`}
+                            id={`approvalSchemesSteps.${indexStep}.to`}
+                            name={`approvalSchemesSteps.${indexStep}.to`}
+                            onChange={formik.handleChange}
+                            value={
+                              formik.values.approvalSchemesSteps[indexStep].to
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row">
                       <div className="col-12">
                         <select
                           className={`form-control${
-                            formik.errors.approvalSchemesSteps?.[indexStep]
+                            (formik.errors as ErrorsType)
+                              .approvalSchemesSteps?.[indexStep]?.approver
                               ? " is-invalid"
                               : ""
                           }`}
