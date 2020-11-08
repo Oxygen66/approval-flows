@@ -82,7 +82,20 @@ describe("ApprovalSchemeEditPage", () => {
     expect(select.value).toEqual("u2");
   });
 
-  it("should submit and send to store scheme data", async () => {
+  it("should delete a threshold", () => {
+    const { getByText, getAllByText } = render(<ApprovalSchemeEditPage />);
+    fireEvent.click(getByText(/Add a threshold/i));
+    fireEvent.click(getByText(/Add a threshold/i));
+    expect(getByText("From 0€ to 500€")).toBeTruthy();
+    expect(getByText("From 500€ to 1500€")).toBeTruthy();
+    const actionButtons = getAllByText(/actions/i) as HTMLButtonElement[];
+    fireEvent.click(actionButtons[0]);
+    fireEvent.click(getByText(/delete/i));
+    expect(() => getByText("From 0€ to 500€")).toThrowError();
+    expect(getByText("From 500€ to 1500€")).toBeTruthy();
+  });
+
+  it("should submit without error", async () => {
     await act(async () => {
       const { getByText } = render(<ApprovalSchemeEditPage />);
       await fireEvent.click(getByText(/Add a threshold/i));
