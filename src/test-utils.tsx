@@ -2,7 +2,8 @@ import React, { ReactElement } from "react";
 import { render } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
-import { BrowserRouter as Router } from "react-router-dom";
+import { Router } from "react-router-dom";
+import { createMemoryHistory } from "history";
 import { rootReducers, RootState } from "./redux/rootReducer";
 
 const initialState: Partial<RootState> = {
@@ -12,15 +13,22 @@ const initialState: Partial<RootState> = {
   },
 };
 
+export interface RenderWithProvidersOptionType {
+  reduxState?: Partial<typeof initialState>;
+  route?: string;
+}
+
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function renderWithProviders(
   ui: ReactElement,
-  { reduxState } = { reduxState: { ...initialState } }
+  option?: RenderWithProvidersOptionType
 ) {
-  const store = createStore(rootReducers, reduxState || initialState);
+  const history = createMemoryHistory();
+  history.push(option?.route ?? "/");
+  const store = createStore(rootReducers, option?.reduxState ?? initialState);
   return render(
     <Provider store={store}>
-      <Router>{ui}</Router>
+      <Router history={history}>{ui}</Router>
     </Provider>
   );
 }

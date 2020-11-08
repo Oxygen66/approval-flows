@@ -1,15 +1,18 @@
 import React, { ReactElement, useMemo } from "react";
-import { Card } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import Avatar from "react-avatar";
+import { Link } from "react-router-dom";
 import { RootState } from "../../../../redux/rootReducer";
+import "./index.scss";
 
 export interface TeamProps {
+  teamId: string;
   name: string;
   userIds: string[];
 }
 
-function Team({ name, userIds }: TeamProps): ReactElement | null {
+function Team({ name, userIds, teamId }: TeamProps): ReactElement | null {
   const { users } = useSelector((state: RootState) => state.users);
 
   const usersFormatted = useMemo(() => {
@@ -24,19 +27,37 @@ function Team({ name, userIds }: TeamProps): ReactElement | null {
   }, [userIds, users]);
 
   return (
-    <Card>
-      <Card.Header>{name}</Card.Header>
-      <Card.Body>
-        <div className="row">
-          {usersFormatted.map((user) => (
-            <div key={user.id} className="col-4">
-              <Avatar size="45" round name={user.fullName} />
-              <span className="pl-1">{user.fullName}</span>
+    <div className="col-12 team">
+      <Card>
+        <Card.Header>
+          <div className="row">
+            <div className="col-6">
+              <h2>{name}</h2>
             </div>
-          ))}
-        </div>
-      </Card.Body>
-    </Card>
+            <div className="col-6 d-flex justify-content-end align-items-center">
+              <Button
+                className="button-link__approval-scheme"
+                size="sm"
+                as={Link}
+                to={`/approval-schemes/${teamId}`}
+              >
+                Edit Approval Scheme
+              </Button>
+            </div>
+          </div>
+        </Card.Header>
+        <Card.Body>
+          <div className="row">
+            {usersFormatted.map((user) => (
+              <div key={user.id} className="col-4">
+                <Avatar size="45" round name={user.fullName} />
+                <span className="pl-1">{user.fullName}</span>
+              </div>
+            ))}
+          </div>
+        </Card.Body>
+      </Card>
+    </div>
   );
 }
 
