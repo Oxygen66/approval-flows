@@ -14,6 +14,9 @@ export interface TeamProps {
 
 function Team({ name, userIds, teamId }: TeamProps): ReactElement | null {
   const { users } = useSelector((state: RootState) => state.users);
+  const { approvalSchemes } = useSelector(
+    (state: RootState) => state.approvalSchemes
+  );
 
   const usersFormatted = useMemo(() => {
     return userIds.slice(0, 3).map((id) => {
@@ -25,6 +28,17 @@ function Team({ name, userIds, teamId }: TeamProps): ReactElement | null {
       };
     });
   }, [userIds, users]);
+
+  const approversFormatted = useMemo(() => {
+    return (approvalSchemes[teamId] || [])
+      .slice(0, 3)
+      .map((approvalSchemeStep) => {
+        return {
+          ...approvalSchemeStep.approver,
+          fullName: `${approvalSchemeStep.approver.first_name} ${approvalSchemeStep.approver.first_name}`,
+        };
+      });
+  }, [approvalSchemes, teamId]);
 
   return (
     <div className="col-12 team">
@@ -48,14 +62,32 @@ function Team({ name, userIds, teamId }: TeamProps): ReactElement | null {
         </Card.Header>
         <Card.Body>
           <div className="row">
+            <div className="col-12 pb-2">
+              <h3>Users</h3>
+            </div>
             {usersFormatted.map((user) => (
-              <div key={user.id} className="col-4">
+              <div key={user.id} className="col-4 user-block">
                 <Avatar size="45" round name={user.fullName} />
-                <span className="pl-1">{user.fullName}</span>
+                <span className="pl-1 fullname">{user.fullName}</span>
               </div>
             ))}
           </div>
         </Card.Body>
+        {approversFormatted.length > 0 && (
+          <Card.Body className="approvers-block">
+            <div className="row">
+              <div className="col-12 pb-2">
+                <h3>Approvers</h3>
+              </div>
+              {approversFormatted.map((user) => (
+                <div key={user.id} className="col-4 approver-block">
+                  <Avatar size="45" round name={user.fullName} />
+                  <span className="pl-1 fullname">{user.fullName}</span>
+                </div>
+              ))}
+            </div>
+          </Card.Body>
+        )}
       </Card>
     </div>
   );
