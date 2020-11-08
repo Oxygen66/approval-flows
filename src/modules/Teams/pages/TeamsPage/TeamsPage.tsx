@@ -12,9 +12,12 @@ function TeamsPage(): JSX.Element | null {
     <Container id="teams">
       <div className="row pt-3">
         {teams.map((team) => (
-          <div key={team.id} className="col-12 team">
-            <Team name={team.name} userIds={team.users} />
-          </div>
+          <Team
+            key={team.id}
+            name={team.name}
+            teamId={team.id}
+            userIds={team.users}
+          />
         ))}
       </div>
     </Container>
