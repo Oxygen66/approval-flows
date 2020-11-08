@@ -1,46 +1,62 @@
-# Getting Started with Create React App
+<h1 align="center">Welcome to Approval Flows (ReactJS) 👋</h1>
+<p>
+  <a href="https://github.com/Oxygen66/universe#readme" target="_blank">
+    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
+  </a>
+  <a href="https://github.com/Oxygen66/universe/graphs/commit-activity" target="_blank">
+    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
+  </a>
+</p>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> ReactJS | Redux | redux-persist | axios | Formik
 
-## Available Scripts
+## Description
 
-In the project directory, you can run:
+This project is an application that allows you to manage approval flows by applying thresholds and a referent for each threshold
 
-### `yarn start`
+## Installation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```bash
+$ npm install
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Running the app
 
-### `yarn test`
+```bash
+# development
+$ yarn start
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# production mode
+$ yarn run build
 
-### `yarn build`
+# test
+$ yarn test
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Technologies
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+This project was build using ReactJS, Redux, react-redux, Formik, axios.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## User stories
 
-### `yarn eject`
+* As an admin, I want to see the list of the teams.
+* As an admin, I want to see the first 3 users of each team.
+* As an admin, I want to see the first 3 approvers of each team.
+* As an admin, I want to click on a team to edit its approval scheme.
+* As an admin, I want to create a new step in an approval scheme (e.g. "from
+$100 to $500").
+* As an admin, I want to change the amounts range of a specific step.
+* As an admin, I want to change the user of a specific step.
+* As an admin, I want to delete a step from an approval scheme.
+* As an admin, I don't want a user to appear twice in the approval scheme.
+* As an admin, I want to save (locally, no API call) the new state of the
+approval scheme.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Author
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+👤 **Adrien BREIL**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+* Github: [@Oxygen66](https://github.com/Oxygen66)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Copyright © 2020 [Adrien BREIL](https://github.com/Oxygen66)
